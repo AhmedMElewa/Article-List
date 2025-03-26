@@ -58,11 +58,13 @@ class ArticleRepositoryImpl @Inject constructor(
             if(e is IOException){
                 val list = local.getAllArticle().toDto()
                 if (list.isEmpty()){
+                    emit(emptyList())
                     throw e
                 }else{
                     emit(list)
                 }
             }else{
+                emit(emptyList())
                 throw e
             }
 
@@ -91,6 +93,7 @@ class ArticleRepositoryImpl @Inject constructor(
             }
 
         }.catch { e ->
+            emit(emptyList())
             throw e
         }.flowOn(Dispatchers.IO)
     }

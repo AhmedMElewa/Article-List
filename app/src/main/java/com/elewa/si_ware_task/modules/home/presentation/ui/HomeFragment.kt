@@ -51,7 +51,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
 
         binding.layoutError.btnRetry.setOnClickListener {
-            viewModel.getArticleList()
+            if (binding.edtSearch.text.toString().length>=2){
+                viewModel.search((binding.edtSearch.text.toString()))
+            }else{
+                viewModel.getArticleList()
+            }
+
         }
 
         binding.edtSearch.addSearchListener(
@@ -106,8 +111,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.error.collectLatest { error ->
                     binding.layoutLoading.clLoading.toGone()
+                    binding.recArticles.toGone()
                     binding.layoutError.clError.toVisible()
                     binding.layoutError.tvError.setText(error)
+
                 }
             }
 
